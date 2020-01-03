@@ -32,7 +32,6 @@ def sphere_convhull(lats, lons):
         https://www.python.org/dev/peps/pep-0484/
 
     """
-    #TODO: write test
     #TODO: validate input
     #TODO: improve doc, correct doc (from "array" to list/NumPy array), specify lat/lon convention
     #TODO: change output format to be consistent with base module?
@@ -60,6 +59,6 @@ def sphere_convhull(lats, lons):
     # chull_x,chull_y = planar_convhull.exterior.xy
     planar_convhull_idx = ConvexHull(pts).vertices
 
-    #unproject to sphere
+    #return indexes
     return planar_convhull_idx
         
