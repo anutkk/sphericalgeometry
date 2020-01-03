@@ -26,6 +26,7 @@ def sphere_convhull(lats, lons):
     References:
         - Frank Weller, Carsten Kirstein, "Computing the Convex Hull of a Simple Polygon on the Sphere" (1996) [https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.43.987]
         -  Lin-Lin Chen, T. C. Woo, "Computational Geometry on the Sphere With Application to Automated Machining" (1992)
+        - C. Grima and A. Marquez, "Computational Geometry on Surfaces: Performing Computational Geometry on the Cylinder, the Sphere, the Torus, and the Cone", Springer, 2002. 
 
     .. _PEP 484:
         https://www.python.org/dev/peps/pep-0484/
