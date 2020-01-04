@@ -62,3 +62,64 @@ def sphere_convhull(lats, lons):
     #return indexes
     return planar_convhull_idx
         
+def geodesic_waypoints(lat0:float, lon0:float, lat1:float, lon1:float, pts_number=20):
+    """Computes waypoints of the geodesic between points on the unit sphere.
+    Assumes points are not antipodal. Uses SLERP interpolation
+
+    Args:
+        Geographic latitudes and longitudes of points in degrees.
+        pts_number - the number of waypoints required.
+
+    Returns:
+        X, Y, Z of the waypoints
+
+    References:
+        - https://en.wikipedia.org/wiki/Slerp
+
+    .. _PEP 484:
+        https://www.python.org/dev/peps/pep-0484/
+    """
+#TODO: return lat/lons instead of XYZ
+
+    #compute cartesian coordinates
+    x0, y0, z0 = geog2cart(lat0, lon0)
+    x1, y1, z1 = geog2cart(lat1, lon1)
+
+    p0 = [x0, y0, z0]
+    p1 = [x1, y1, z1]
+
+    omega = np.arccos(np.dot(p0,p1))
+
+    t = np.linspace(0, 1, pts_number)
+
+    x_slerp = x0 * np.sin((1-t)*omega) / np.sin(omega) + x1 * np.sin(t*omega)/np.sin(omega)
+    y_slerp = y0 * np.sin((1-t)*omega) / np.sin(omega) + y1 * np.sin(t*omega)/np.sin(omega)
+    z_slerp = z0 * np.sin((1-t)*omega) / np.sin(omega) + z1 * np.sin(t*omega)/np.sin(omega)
+
+    return x_slerp, y_slerp, z_slerp
+
+
+
+
+def geog2cart(lats, lons, R=1):
+    """Converts geographic coordinates on sphere to 3D Cartesian points.
+
+    Args:
+       Latitude(s) and longitude(s) in degrees
+
+    Returns:
+        X,Y,Z
+
+
+
+    .. _PEP 484:
+        https://www.python.org/dev/peps/pep-0484/
+    """
+    lonr = np.deg2rad(lons)
+    latr = np.deg2rad(lats)
+    pts_x = R * np.cos(latr)*np.cos(lonr)
+    pts_y = R * np.cos(latr)*np.sin(lonr)
+    pts_z = R * np.sin(latr)
+
+    return pts_x, pts_y, pts_z
+    

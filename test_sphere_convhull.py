@@ -4,7 +4,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 from itertools import product, combinations
 
-import sphere_convhull
+import sphericalgeometry
 
 # Create array of random points on the sphere
 # See https://mathworld.wolfram.com/SpherePointPicking.html
@@ -29,9 +29,7 @@ for jj in range(0, number_of_points):
     lats = np.append(lats, lat)
 
 # Compute convex hull
-chull_idx = sphere_convhull.sphere_convhull(lats, lons)
-
-
+chull_idx = sphericalgeometry.sphere_convhull(lats, lons)
 
 # Display results
 fig = plt.figure()
@@ -46,26 +44,50 @@ x = earthRadius * np.cos(u)*np.sin(v)
 y = earthRadius * np.sin(u)*np.sin(v)
 z = earthRadius * np.cos(v)
 ax.plot_wireframe(x, y, z, color="k")
+#TODO: use geog2cart function
+#The formulaes used do not fit the usual geographic lat/lon convention and instead are for colatitude. Since this is a sphere mesh it does not matter.
+# ax.plot_surface(x, y, z, cmap=plt.cm.YlGnBu_r)
 
-lonr = np.deg2rad(lons)
-latr = np.deg2rad(lats)
-pts_x = earthRadius * np.cos(latr)*np.cos(lonr)
-pts_y = earthRadius * np.cos(latr)*np.sin(lonr)
-pts_z = earthRadius * np.sin(latr)
+
+# lonr = np.deg2rad(lons)
+# latr = np.deg2rad(lats)
+# pts_x = earthRadius * np.cos(latr)*np.cos(lonr)
+# pts_y = earthRadius * np.cos(latr)*np.sin(lonr)
+# pts_z = earthRadius * np.sin(latr)
+
+pts_x, pts_y, pts_z = sphericalgeometry.geog2cart(lats, lons)
 
 ax.scatter(pts_x, pts_y, pts_z, color="g", s=100)
 
-chull_lonr = np.deg2rad(lons[chull_idx])
-chull_latr = np.deg2rad(lats[chull_idx])
-#close polygon
-chull_lonr = np.append(chull_lonr, chull_lonr[1])
-chull_latr = np.append(chull_latr, chull_latr[1])
-chull_pts_x = earthRadius * np.cos(chull_latr)*np.cos(chull_lonr)
-chull_pts_y = earthRadius * np.cos(chull_latr)*np.sin(chull_lonr)
-chull_pts_z = earthRadius * np.sin(chull_latr)
+# chull_lonr = np.deg2rad(lons[chull_idx])
+# chull_latr = np.deg2rad(lats[chull_idx])
+# #close polygon
+# chull_lonr = np.append(chull_lonr, chull_lonr[0])
+# chull_latr = np.append(chull_latr, chull_latr[0])
+# chull_pts_x = earthRadius * np.cos(chull_latr)*np.cos(chull_lonr)
+# chull_pts_y = earthRadius * np.cos(chull_latr)*np.sin(chull_lonr)
+# chull_pts_z = earthRadius * np.sin(chull_latr)
 
-#TODO: interpolate so that a correct polygon on the sphere is displayed
+chull_lons = np.append(lons[chull_idx], lons[chull_idx[0]])
+chull_lats = np.append(lats[chull_idx], lats[chull_idx[0]])
+# chull_pts_x, chull_pts_y, chull_pts_z = sphericalgeometry.geog2cart(chull_lats, chull_lons)
+# ax.plot(chull_pts_x, chull_pts_y, chull_pts_z, color="r")
 
-ax.plot(chull_pts_x, chull_pts_y, chull_pts_z, color="r")
+#interpolate so that spherical polygon is correctly displayed
+chull_pts_x = np.array([])
+chull_pts_y = np.array([])
+chull_pts_z = np.array([])
+
+for ii in range(len(chull_lons)-1):
+    print(ii)
+    lat0, lon0 = chull_lats[ii], chull_lons[ii]
+    lat1, lon1 = chull_lats[ii+1], chull_lons[ii+1]
+    x_slerp, y_slerp, z_slerp=sphericalgeometry.geodesic_waypoints(lat0, lon0, lat1, lon1)
+    chull_pts_x = np.append(chull_pts_x, x_slerp)
+    chull_pts_y = np.append(chull_pts_y, y_slerp)
+    chull_pts_z = np.append(chull_pts_z, z_slerp)
+
+
+ax.plot(chull_pts_x, chull_pts_y, chull_pts_z, color='r')
 
 plt.show()
