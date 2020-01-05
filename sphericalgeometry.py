@@ -17,27 +17,23 @@ def sphere_convhull(lats, lons):
     For now works only on points on North hemisphere
 
     Args:
-        lats (double): latitudes of the points in degrees
-        lons (double): longitudes of the points in degrees
+        lats (double): geographic latitudes of the points in degrees
+        lons (double): geographic longitudes of the points in degrees
 
     Returns:
         Indexes of the points forming the convex hull.
 
     References:
-        - Frank Weller, Carsten Kirstein, "Computing the Convex Hull of a Simple Polygon on the Sphere" (1996) [https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.43.987]
         -  Lin-Lin Chen, T. C. Woo, "Computational Geometry on the Sphere With Application to Automated Machining" (1992)
-        - C. Grima and A. Marquez, "Computational Geometry on Surfaces: Performing Computational Geometry on the Cylinder, the Sphere, the Torus, and the Cone", Springer, 2002. 
-
-    .. _PEP 484:
-        https://www.python.org/dev/peps/pep-0484/
-
+        - Frank Weller, Carsten Kirstein, "Computing the Convex Hull of a Simple Polygon on the Sphere" (1996) [https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.43.987]
     """
     #TODO: validate input
-    #TODO: improve doc, correct doc (from "array" to list/NumPy array), specify lat/lon convention
+    #TODO: improve doc, correct doc (from "array" to list/NumPy array)
     #TODO: change output format to be consistent with base module?
     #TODO: check hemispherity and cope with it
     #TODO: add support for south hemisphere
     #TODO: add support for any hemisphere
+    #TODO: maybe use Grima-Marquez version of Graham's algorithm?
 
     phis = np.deg2rad(lats)
     lambdas = np.deg2rad(lons)
@@ -54,9 +50,6 @@ def sphere_convhull(lats, lons):
     pts = np.column_stack((x,y))
 
     #compute planar convex hull
-    # planar_set = shapely.geometry.MultiPoint(pts)
-    # planar_convhull = planar_set.convex_hull
-    # chull_x,chull_y = planar_convhull.exterior.xy
     planar_convhull_idx = ConvexHull(pts).vertices
 
     #return indexes
@@ -71,15 +64,12 @@ def geodesic_waypoints(lat0:float, lon0:float, lat1:float, lon1:float, pts_numbe
         pts_number - the number of waypoints required.
 
     Returns:
-        X, Y, Z of the waypoints
+        X, Y, Z of the waypoints.
 
     References:
         - https://en.wikipedia.org/wiki/Slerp
-
-    .. _PEP 484:
-        https://www.python.org/dev/peps/pep-0484/
     """
-#TODO: return lat/lons instead of XYZ
+#TODO: return lat/lons instead of XYZ ?
 
     #compute cartesian coordinates
     x0, y0, z0 = geog2cart(lat0, lon0)
@@ -98,22 +88,14 @@ def geodesic_waypoints(lat0:float, lon0:float, lat1:float, lon1:float, pts_numbe
 
     return x_slerp, y_slerp, z_slerp
 
-
-
-
 def geog2cart(lats, lons, R=1):
     """Converts geographic coordinates on sphere to 3D Cartesian points.
 
     Args:
-       Latitude(s) and longitude(s) in degrees
+       Latitude(s) and longitude(s) in degrees.
 
     Returns:
         X,Y,Z
-
-
-
-    .. _PEP 484:
-        https://www.python.org/dev/peps/pep-0484/
     """
     lonr = np.deg2rad(lons)
     latr = np.deg2rad(lats)

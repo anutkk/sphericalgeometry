@@ -46,28 +46,12 @@ z = earthRadius * np.cos(v)
 ax.plot_wireframe(x, y, z, color="k")
 #TODO: use geog2cart function
 #The formulaes used do not fit the usual geographic lat/lon convention and instead are for colatitude. Since this is a sphere mesh it does not matter.
-# ax.plot_surface(x, y, z, cmap=plt.cm.YlGnBu_r)
-
-
-# lonr = np.deg2rad(lons)
-# latr = np.deg2rad(lats)
-# pts_x = earthRadius * np.cos(latr)*np.cos(lonr)
-# pts_y = earthRadius * np.cos(latr)*np.sin(lonr)
-# pts_z = earthRadius * np.sin(latr)
 
 pts_x, pts_y, pts_z = sphericalgeometry.geog2cart(lats, lons)
 
 ax.scatter(pts_x, pts_y, pts_z, color="g", s=100)
 
-# chull_lonr = np.deg2rad(lons[chull_idx])
-# chull_latr = np.deg2rad(lats[chull_idx])
-# #close polygon
-# chull_lonr = np.append(chull_lonr, chull_lonr[0])
-# chull_latr = np.append(chull_latr, chull_latr[0])
-# chull_pts_x = earthRadius * np.cos(chull_latr)*np.cos(chull_lonr)
-# chull_pts_y = earthRadius * np.cos(chull_latr)*np.sin(chull_lonr)
-# chull_pts_z = earthRadius * np.sin(chull_latr)
-
+#close polygon
 chull_lons = np.append(lons[chull_idx], lons[chull_idx[0]])
 chull_lats = np.append(lats[chull_idx], lats[chull_idx[0]])
 # chull_pts_x, chull_pts_y, chull_pts_z = sphericalgeometry.geog2cart(chull_lats, chull_lons)
