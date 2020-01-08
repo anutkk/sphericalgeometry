@@ -7,7 +7,7 @@ The functions work on sets of points on the unit sphere.
 ## High-level functions
 Functions having high-level functionality (some do not exist yet):
 
-* `sphere_convhull` - Computes the spherical convex hull of a set of points on the unit sphere (currently works only if no point is on the equator).
+* `sphere_convhull` - Computes the spherical convex hull of a set of points on the unit sphere (currently works only if the point are not across the Equator).
 
 * `pspolydist` - Computes the minimum distance from a point to a polyline on a sphere (unfinished). This is an adaptation to Python of the original MATLAB function [`p_spoly_dist`](https://www.mathworks.com/matlabcentral/fileexchange/52734-p_spoly_dist) by Michael Yoshpe (in-work).
 
