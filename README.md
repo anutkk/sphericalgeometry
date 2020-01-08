@@ -7,7 +7,7 @@ The functions work on sets of points on the unit sphere.
 ## High-level functions
 Functions having high-level functionality (some do not exist yet):
 
-* `sphere_convhull` - Computes the spherical convex hull of a set of points on the unit sphere (currently works only in North hemisphere).
+* `sphere_convhull` - Computes the spherical convex hull of a set of points on the unit sphere (currently works only if no point is on the equator).
 
 * `pspolydist` - Computes the minimum distance from a point to a polyline on a sphere (unfinished). This is an adaptation to Python of the original MATLAB function [`p_spoly_dist`](https://www.mathworks.com/matlabcentral/fileexchange/52734-p_spoly_dist) by Michael Yoshpe (in-work).
 
@@ -15,6 +15,8 @@ Functions having high-level functionality (some do not exist yet):
 
 ## Service functions
 Basic non-original functions, which were included mainly to be used by high-level functions or scripts (some do not exist yet):
+
+* `gnomonic_proj` - Computes the gnomonic projection (also called central projection) of points on the sphere.
 
 * `geog2cart` - Converts geographic coordinates (lat/lon) to 3D Cartesian coordinates.
 

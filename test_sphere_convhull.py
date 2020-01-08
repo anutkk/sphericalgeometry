@@ -63,7 +63,7 @@ chull_pts_y = np.array([])
 chull_pts_z = np.array([])
 
 for ii in range(len(chull_lons)-1):
-    print(ii)
+    # print(ii)
     lat0, lon0 = chull_lats[ii], chull_lons[ii]
     lat1, lon1 = chull_lats[ii+1], chull_lons[ii+1]
     x_slerp, y_slerp, z_slerp=sphericalgeometry.geodesic_waypoints(lat0, lon0, lat1, lon1)
