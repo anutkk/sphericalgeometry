@@ -38,10 +38,8 @@ def sphere_convhull(lats, lons):
     # validate input
     assert len(lats)==len(lons), "Latitudes and longitudes must have the same length."
     assert len(lats)>2, "There must be more than 2 points."
-    assert np.all(lats >= -90) and np.all(lats <=
-                                          90),  "Latitudes should be in the range [-90, 90]"
-    assert np.all(lons >= -180) and np.all(lats <=
-                                           180), "Longitudes should be in the range [-180, 180]"
+    assert np.all(lats >= -90) and np.all(lats <=90) ,  "Latitudes should be in the range [-90, 90]"
+    assert np.all(lons >= -180) and np.all(lats <= 180) , "Longitudes should be in the range [-180, 180]"
 
     # define central point of gnomonic projection
     # assert np.all(lats > 0)  # check all points on the open north hemisphere
@@ -71,18 +69,73 @@ def sphere_convhull(lats, lons):
         raise ValueError('Points accros the Equator are currently not supported.')
         north_lats = lats[lats > 0]
         north_lons = lons[lats > 0]
-        south_lats = lats[lats > 0]
-        south_lons = lons[lats > 0]
+        south_lats = lats[lats < 0]
+        south_lons = lons[lats < 0]
         north_xypts = gnomonic_proj(lat0, lon0, north_lats, north_lons)
         south_xypts = gnomonic_proj(lat0, lon0, south_lats, south_lons)
-        north_cvhull_idx = ConvexHull(north_xypts).vertices
-        south_cvhull_idx = ConvexHull(south_xypts).vertices
+        # north_cvhull = np.array(ConvexHull(north_xypts).points)
+        # south_cvhull = np.array(ConvexHull(south_xypts).points)
+        north_cvhull_idx = np.array(ConvexHull(north_xypts).vertices)
+        south_cvhull_idx = np.array(ConvexHull(south_xypts).vertices)
+        north_cvhull = north_xypts[north_cvhull_idx,:]
+        south_cvhull = south_xypts[south_cvhull_idx,:]
 
-        #check if they intersect by passing over every edge smartly
-        north_edge_index = 0
-        south_edge_index = 0
-        while north_edge_index<len(north_cvhull_idx):
-            north_edge = north_xypts
+        #check if they intersect by passing over every edge and check whether it forms a separating axis
+        #currently the method used is O(n^2), based on https://stackoverflow.com/questions/753140/how-do-i-determine-if-two-convex-polygons-intersect 
+        #TODO: consider logarithmic time algorithm using https://epubs.siam.org/doi/pdf/10.1137/1.9781611973730.109
+        jj = 0
+        intersecting = True
+        while jj<len(north_cvhull):
+            jj1 = (jj+1) % len(north_cvhull)
+            m = (north_cvhull[jj1,1]-north_cvhull[jj,1])/(north_cvhull[jj1,0]-north_cvhull[jj,0])
+            b = north_cvhull[jj,1] - m*north_cvhull[jj,0]
+            northPointsSigns = np.sign(north_cvhull[:,1] - m*north_cvhull[:,0] - b)
+            # northPointsSigns = np.delete(northPointsSigns, northPointsSigns==0)
+            southPointsSigns = np.sign(south_cvhull[:,1] - m*south_cvhull[:,0] - b)
+            if (np.all(northPointsSigns>=0) and np.all(southPointsSigns<0)) or (np.all(northPointsSigns<=0) and np.all(southPointsSigns>0)):
+                intersecting = False
+                lats_separating = north_lats[north_cvhull_idx[[jj, jj1]]]
+                lons_separating = north_lons[north_cvhull_idx[[jj, jj1]]]
+                break
+            jj+=1
+        if intersecting: #keep checking the edges of the other polygon
+            jj=0
+            while jj<len(south_cvhull):
+                jj1 = (jj+1) % len(south_cvhull)
+                m = (south_cvhull[jj1,1]-south_cvhull[jj,1])/(south_cvhull[jj1,0]-south_cvhull[jj,0])
+                b = south_cvhull[jj,1] - m*south_cvhull[jj,0]
+                northPointsSigns = np.sign(north_cvhull[:,1] - m*north_cvhull[:,0] - b)
+                # northPointsSigns = np.delete(northPointsSigns, northPointsSigns==0)
+                southPointsSigns = np.sign(south_cvhull[:,1] - m*south_cvhull[:,0] - b)
+                if (np.all(northPointsSigns>0) and np.all(southPointsSigns<=0)) or (np.all(northPointsSigns<0) and np.all(southPointsSigns>=0)):
+                    intersecting = False
+                    lats_separating = south_lats[south_cvhull_idx[[jj, jj1]]]
+                    lons_separating = south_lons[south_cvhull_idx[[jj, jj1]]]
+                    break
+                jj+=1
+        
+        if intersecting:
+            raise ValueError('Points are not hemispheric, the convex hull is the whole sphere.')
+        
+        #the points are on the same hemisphere, so find the appropriate point for central projection
+        else:
+            #find normal vector of plane of great circle (sign does not matter, it will work either way)
+            separating_cart = np.column_stack(geog2cart(lats_separating, lons_separating))
+            normal_vector = np.cross(separating_cart[0,:], separating_cart[1,:])
+            normal_vector = normal_vector / np.linalg.norm(normal_vector)
+            lat0, lon0 = cart2geog(normal_vector[0], normal_vector[1], normal_vector[2])
+            
+            # gnomonic projection
+            pts = gnomonic_proj(lat0, lon0, lats, lons)
+            # compute planar convex hull
+            planar_convhull_idx = ConvexHull(pts).vertices
+            # return indexes
+            return planar_convhull_idx
+
+            #TODO: use already computed convex hulls!
+
+
+
         
 
 
@@ -171,3 +224,19 @@ def geog2cart(lats, lons, R=1):
     pts_z = R * np.sin(latr)
 
     return pts_x, pts_y, pts_z
+
+def cart2geog(x,y,z, R=1):
+    """Converts 3D Cartesian points to geographic coordinates on sphere.
+
+    Args:
+       3D coordinates of points..
+
+    Returns:
+        Latitudes and longitudes of points in degrees.
+    """
+    r = np.sqrt(x**2 + y**2 + z**2)
+    assert np.all(np.abs(r-R) < np.finfo(float).eps) , "Points are not on sphere!"
+    lons = np.arctan2(y, x)
+    lats = np.arcsin(z/R)
+
+    return np.rad2deg(lats), np.rad2deg(lons)

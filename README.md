@@ -22,7 +22,7 @@ Basic non-original functions, which were included mainly to be used by high-leve
 
 * `geodesic_waypoints` - Computes waypoints along a geodesic ("great circle") between two points.
 
-* `cart2geog` - Convert 3D Cartesian coordinates to geographic coordinates (in-work).
+* `cart2geog` - Convert 3D Cartesian coordinates to geographic coordinates.
 
 ## Some basic notions of spherical geometry
 ### Great circles and geodesics
