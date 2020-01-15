@@ -9,6 +9,9 @@ import sphericalgeometry
 # Create array of random points on the sphere
 # See https://mathworld.wolfram.com/SpherePointPicking.html
 # Part of the test code has been inspired by https://github.com/VictorDavis/GeoConvexHull/blob/master/GeoConvexHull.py by Victor Davis
+
+#TODO: make a Jupyter Notebook
+#TODO: show various cases: North hemisphere, South hemisphere, any hemisphere
 lons = np.array([])
 lats = np.array([])
 number_of_points = 20
@@ -29,11 +32,11 @@ for jj in range(0, number_of_points):
     lats = np.append(lats, lat)
 
 # Compute convex hull
-# try:
-chull_idx = sphericalgeometry.sphere_convhull(lats, lons)
-# except:
-#     print("Convex Hull failed, still printing points...")
-#     chull_idx = []
+try:
+    chull_idx = sphericalgeometry.sphere_convhull(lats, lons)
+except:
+    print("Convex Hull failed, still printing points...")
+    chull_idx = []
 
 # Display results
 fig = plt.figure()
