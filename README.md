@@ -1,18 +1,18 @@
 # sphericalgeometry
 A Python module of various spherical computational geometry related functions.
 
-This module is a work-in-progress including various spherical geometry functions that I needed and could not find in well-known libraries.
+This module contains various spherical geometry functions that I needed and could not find in well-known libraries.
 The functions work on sets of points on the unit sphere.
 
 ## High-level functions
-Functions having high-level functionality (some do not exist yet):
+Functions having high-level functionality:
 
-* `sphere_convhull` - Computes the spherical convex hull of a set of points on the unit sphere (currently works only if the point are not across the Equator).
-
+* `sphere_convhull` - Computes the spherical convex hull of a set of points on the unit sphere.
+<!--
 * `pspolydist` - Computes the minimum distance from a point to a polyline on a sphere (unfinished). This is an adaptation to Python of the original MATLAB function [`p_spoly_dist`](https://www.mathworks.com/matlabcentral/fileexchange/52734-p_spoly_dist) by Michael Yoshpe (in-work).
 
 * `insphericalpolygon` - Returns points inside of a spherical polygon (in-work).
-
+-->
 ## Service functions
 Basic non-original functions, which were included mainly to be used by high-level functions or scripts (some do not exist yet):
 
@@ -31,11 +31,11 @@ In "regular" Euclidean geometry, the shortest path between two points on the pla
 
 Given two "close" points on the sphere, they define a unique circle on the sphere which passes through them. We call this circle a "great circle". The great circle is separated in two paths, both of them connecting the two points. The shortest path on the sphere between the points is the smallest part of the corresponding great circle.
 
-TODO: add figure
+<!-- TODO: add figure -->
 
 Now consider the two poles of the sphere (the North pole and the South Pole, by analogy to the Earth, which is not a sphere). What is the shortest path between them? In fact, since the sphere is symmetric around its center, there are an infinity of shortest paths.
 
-
+<!--
 ### Convexity on the plane and on the sphere
 
 TODO
@@ -56,6 +56,7 @@ Minimum-perimeter bounding spherical polygon
 
 
 TODOs
+-->
 
 ## References:
 1. C. Grima and A. Marquez, ["Computational Geometry on Surfaces: Performing Computational Geometry on the Cylinder, the Sphere, the Torus, and the Cone"](https://www.springer.com/gp/book/9781402002021), Springer (2002). 

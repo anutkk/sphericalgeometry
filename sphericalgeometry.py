@@ -29,8 +29,7 @@ def sphere_convhull(lats, lons):
     """
     # TODO: improve doc, correct doc (from "array" to list/NumPy array)
     # TODO: change output format to be consistent with base module?
-    # TODO: check hemispherity and cope with it
-    # TODO: add support for any hemisphere
+    # TODO: add support for points on equator
     # TODO: maybe use Grima-Marquez version of Graham's algorithm?
 
     # validate input
@@ -64,11 +63,11 @@ def sphere_convhull(lats, lons):
     # no clear hemisphere - check if there is another hemisphere by 
     # intersecting hulls of the two sets of points
     else:
-        raise NotImplementedError('Points accros the Equator are currently not supported.')
-        north_lats = lats[lats > 0]
-        north_lons = lons[lats > 0]
-        south_lats = lats[lats < 0]
-        south_lons = lons[lats < 0]
+        # raise NotImplementedError('Points accros the Equator are currently not supported.')
+        north_lats = lats[kk_north]
+        north_lons = lons[kk_north]
+        south_lats = lats[kk_south]
+        south_lons = lons[kk_south]
         north_xypts = gnomonic_proj(lat0, lon0, north_lats, north_lons)
         south_xypts = gnomonic_proj(lat0, lon0, south_lats, south_lons)
         # north_cvhull = np.array(ConvexHull(north_xypts).points)
@@ -169,9 +168,10 @@ def gnomonic_proj(lat0: float, lon0: float, lats, lons):
 
     cosc = np.sin(phi0) * np.sin(phis) + np.cos(phi0) * \
         np.cos(phis) * np.cos(lambdas-lambda0)
-    x = (np.cos(phis) * np.sin(lambdas-lambda0)) / cosc
-    y = (np.cos(phi0)*np.sin(phis) - np.sin(phi0) *
+    y = (np.cos(phis) * np.sin(lambdas-lambda0)) / cosc
+    x = (np.cos(phi0)*np.sin(phis) - np.sin(phi0) *
          np.cos(phis)*np.cos(lambdas-lambda0)) / cosc
+    #x and y are chosen so that they fit the 3D cartesian coordinates convention
     pts = np.column_stack((x, y))
 
     return pts

@@ -53,7 +53,7 @@ ax.plot_wireframe(x, y, z, color="k")
 
 pts_x, pts_y, pts_z = sphericalgeometry.geog2cart(lats, lons)
 
-ax.scatter(pts_x, pts_y, pts_z, color="g", s=100)
+ax.scatter(pts_x, pts_y, pts_z, color="g", s=50)
 
 if len(chull_idx)>0:
     #close polygon
