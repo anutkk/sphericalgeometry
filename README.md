@@ -38,30 +38,33 @@ Now consider the two poles of the sphere (the North pole and the South Pole, by 
 
 > A planar polygon is convex if it contains all the line segments connecting any pair of its points.
 > -- [Wolfram MathWorld](http://mathworld.wolfram.com/ConvexPolygon.html)
+
+As such, the convex hull of a set of points is the smallest convex polygon that contains the set. This definition is simple and intuitive in the (Euclidean) plane, since the "line segment connecting two points" is well-defined and always unique<sup>[2](#myfootnote2)</sup>.
+
+However, if we adapt the definition to a set of points on a sphere, the convex hull problem may be ill-defined if the set contains antipodal points. In this case, the shortests paths connecting the points cover the whole sphere, and the convex hull, which must contain all shortest paths is the whole sphere. More generally, this would happen if the set of points are not contained within an open hemisphere. This makes the definition of "convex hull" not very useful, since for many simple cases it would be the entire surface.
+
+In order to define the spherical convex hull problem without encountering this problem, two approachs exist:
+
+* Spherical convexity is defined for any set of points. A set of points on the sphere is said to be spherically convex, if for any two points, the geodesic joining them lies entirely in the set.  If the points are not contained within an open hemisphere, the convex hull is defined to be the whole sphere [Grima and Marquez, p. 47].
+* We define a new concept, _strict_ convexity, which is defined only for points contained within an open hemisphere. If the points are not contained within an open hemisphere, there is no strictly convex hull, and the non-strictly convex hull is the whole sphere [Chen and Woo].
+
+The implementation of the (strictly) convex hull in this library follows the second approach. If the points are not contained within an open hemisphere, the function throws an exception.
+
+### Is Convex Hull always the solution? An example
+
+Consider the following configuration of points (from [Math Overflow](https://mathoverflow.net/questions/76875/convex-hull-on-a-riemannian-manifold)), which do not fit in a hemisphere.
+
+![](images/convex_hull_degenerate_case.jpg?raw=true)
+
+ Suppose the sphere is Earth, and think of the points as locations of hurricanes during last year. We would like to find the area on Earth which is most prone to hurricanes. Intuitively, the points can be enclosed by a small shape - the blue polygon. However, the convex hull is the whole sphere, since the points do not fit in a hemisphere.
+
+**In other words, the spherical convex hull fails to represent the actual geometry of physical problems**. This makes it less useful in real-world applications.
+
 <!--
-As such, the convex hull of a set of points 
-
-This definition is simple and intuitive in the (Euclidean) plane, since the "line segment connecting two points" is well-defined and always unique.
-
-However, if we adapt the definition 
-
-Convexity of antipodal points
-
-Quasi-convexity
-
-
-### Is Convex Hull always the solution?
-
-TODO
-
-See [this question](https://mathoverflow.net/questions/76875/convex-hull-on-a-riemannian-manifold) on Math Overflow.
-
 ### Minimum Enclosing Polygon
 
 Minimum-perimeter bounding spherical polygon
 
-
-TODOs
 -->
 
 ## References:
@@ -74,3 +77,5 @@ TODOs
 ## Notes
 
 <a name="myfootnote1">1</a>: This is the original meaning of the word "geodesic". In Riemann geometry the geodesic is the whole great circle - see on [Wikipedia](https://en.wikipedia.org/wiki/Geodesic#Metric_geometry). Here I use the word as its meaning in geodesy, in order to differentiate from the whole great circle.
+
+<a name="myfootnote2">1</a>: Other definitions of convexity exist, which are equivalent in the planar case but not necessarily in the spherical case [Grima and Marquez, pp 31-36].
