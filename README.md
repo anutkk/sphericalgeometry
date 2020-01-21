@@ -5,7 +5,6 @@ This module contains various spherical geometry functions that I needed and coul
 The functions work on sets of points on the unit sphere.
 
 ## High-level functions
-Functions having high-level functionality:
 
 * `sphere_convhull` - Computes the spherical convex hull of a set of points on the unit sphere.
 <!--
@@ -33,16 +32,23 @@ Given two "close" points on the sphere, they define a unique circle on the spher
 
 <!-- TODO: add figure -->
 
-Now consider the two poles of the sphere (the North pole and the South Pole, by analogy to the Earth, which is not a sphere). What is the shortest path between them? In fact, since the sphere is symmetric around its center, there are an infinity of shortest paths.
+Now consider the two poles of the sphere (the North pole and the South Pole, by analogy to the Earth, which is not a sphere). What is the shortest path between them? In fact, since the sphere is symmetric around its center, there are an infinity of shortest paths. These points are called _antipodal_. 
 
-<!--
 ### Convexity on the plane and on the sphere
 
-TODO
+> A planar polygon is convex if it contains all the line segments connecting any pair of its points.
+> -- [Wolfram MathWorld](http://mathworld.wolfram.com/ConvexPolygon.html)
+<!--
+As such, the convex hull of a set of points 
+
+This definition is simple and intuitive in the (Euclidean) plane, since the "line segment connecting two points" is well-defined and always unique.
+
+However, if we adapt the definition 
 
 Convexity of antipodal points
 
 Quasi-convexity
+
 
 ### Is Convex Hull always the solution?
 
