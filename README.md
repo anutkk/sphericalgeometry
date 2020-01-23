@@ -8,6 +8,9 @@ The package's API is focused for simplicity, casuality and easiness of use.
 Inputs are arrays of geographic coordinates and outputs are scalars or arrays of geographic coordinates.
 Specifically, the package is **not** object-oriented.
 
+__This package is still under development. Many functions are to be added. 
+However, the API for functions in the master branch will not be subject to changes.__
+
 ## Requirements
 
 * Python >= 3.6
@@ -53,6 +56,10 @@ However, some of the low-level functions return and use 3D Cartesian coordinates
 ## Limitations
 
 There is no support for disjoint polygons.
+
+## Alternatives
+
+Check out the [spherical_geometry](https://github.com/spacetelescope/spherical_geometry) package by spacetelescope. Stable and strongly object-oriented.
 
 ## Some basic notions of spherical geometry
 ### Great circles and geodesics
