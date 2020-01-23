@@ -9,7 +9,7 @@ Inputs are arrays of geographic coordinates and outputs are scalars or arrays of
 Specifically, the package is **not** object-oriented.
 
 __This package is still under development. Many functions are to be added. 
-However, the API for functions in the master branch will not be subject to changes.__
+However, the API for high-level functions in the master branch will not be subject to changes.__
 
 ## Requirements
 
@@ -33,6 +33,7 @@ This is an adaptation to Python of the original MATLAB function [`p_spoly_dist`]
 ## Low-level functions
 
 Those functions were included mainly to be used by high-level functions or example scripts.
+Their syntax may change in the future.
 
 * `gnomonic_proj` - Computes the gnomonic projection (also called central projection) of points on the sphere.
 
