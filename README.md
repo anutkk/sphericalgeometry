@@ -14,17 +14,22 @@ Specifically, the package is **not** object-oriented.
 * Numpy
 * Scipy
 
+## High-level functions
+
+* `sphere_convhull`: Computes the spherical convex hull of a set of points on the unit sphere.
+<!--
+
+* `minareapolygon`: Computes the minimum-area bounding polygon of a set of points on the sphere.
+
+* `pspolydist` - Computes the minimum distance from a point to a polyline on a sphere. 
+This is an adaptation to Python of the original MATLAB function [`p_spoly_dist`](https://www.mathworks.com/matlabcentral/fileexchange/52734-p_spoly_dist) by Michael Yoshpe (in-work).
+
+* `insphericalpolygon` - Returns points inside of a spherical polygon.
+-->
+
 ## Low-level functions
 
-* `sphere_convhull` - Computes the spherical convex hull of a set of points on the unit sphere.
-<!--
-* `pspolydist` - Computes the minimum distance from a point to a polyline on a sphere (unfinished). This is an adaptation to Python of the original MATLAB function [`p_spoly_dist`](https://www.mathworks.com/matlabcentral/fileexchange/52734-p_spoly_dist) by Michael Yoshpe (in-work).
-
-* `insphericalpolygon` - Returns points inside of a spherical polygon (in-work).
--->
-## Service functions
-
-Basic functions, which were included mainly to be used by high-level functions or example scripts:
+Those functions were included mainly to be used by high-level functions or example scripts.
 
 * `gnomonic_proj` - Computes the gnomonic projection (also called central projection) of points on the sphere.
 
@@ -40,6 +45,11 @@ The package was designed so that the user needs to deal exclusively with geograp
 The units are degrees.
 However, some of the low-level functions return and use 3D Cartesian coordinates (X, Y, Z).
 
+<!--
+## The inside of a spherical polygon
+
+
+-->
 ## Limitations
 
 There is no support for disjoint polygons.
