@@ -1,9 +1,17 @@
 # sphericalgeometry
-A Python module of various spherical computational geometry related functions.
+A Python package for spherical computational geometry.
 
-This module contains various spherical geometry functions that I needed and could not find in well-known libraries.
-The functions work on sets of points on the unit sphere.
+This package contains various spherical geometry functions that I needed and could not find in well-known libraries.
+The functions work on sets of points on the sphere.
 
+The package's API is focused for simplicity, casuality and easiness of use. Inputs are arrays of geographic coordinates and outputs are scalars or arrays of geographic coordinates.
+Specifically, the package is **not** object-oriented.
+
+## Requirement
+
+* Python >= 3.6
+* Numpy
+* Scipy
 ## High-level functions
 
 * `sphere_convhull` - Computes the spherical convex hull of a set of points on the unit sphere.
@@ -13,15 +21,16 @@ The functions work on sets of points on the unit sphere.
 * `insphericalpolygon` - Returns points inside of a spherical polygon (in-work).
 -->
 ## Service functions
-Basic non-original functions, which were included mainly to be used by high-level functions or scripts (some do not exist yet):
+Basic functions, which were included mainly to be used by high-level functions or example scripts:
 
 * `gnomonic_proj` - Computes the gnomonic projection (also called central projection) of points on the sphere.
 
 * `geog2cart` - Converts geographic coordinates (lat/lon) to 3D Cartesian coordinates.
 
+* `cart2geog` - Convert 3D Cartesian coordinates to geographic coordinates.
+
 * `geodesic_waypoints` - Computes waypoints along a geodesic ("great circle") between two points.
 
-* `cart2geog` - Convert 3D Cartesian coordinates to geographic coordinates.
 
 ## Some basic notions of spherical geometry
 ### Great circles and geodesics
