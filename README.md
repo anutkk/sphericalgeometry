@@ -14,7 +14,7 @@ Specifically, the package is **not** object-oriented.
 * Numpy
 * Scipy
 
-## High-level functions
+## Low-level functions
 
 * `sphere_convhull` - Computes the spherical convex hull of a set of points on the unit sphere.
 <!--
