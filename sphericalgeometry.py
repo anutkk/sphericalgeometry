@@ -3,8 +3,6 @@
 
 By Samuel Londner
 
-TODO:
-    * For module TODOs
 
 """
 import numpy as np
@@ -28,7 +26,6 @@ def sphere_convhull(lats, lons):
 
     """
     # TODO: improve doc, correct doc (from "array" to list/NumPy array)
-    # TODO: change output format to be consistent with base module?
     # TODO: add support for points on equator
     # TODO: maybe use Grima-Marquez version of Graham's algorithm?
 
@@ -61,50 +58,50 @@ def sphere_convhull(lats, lons):
         return planar_convhull_idx
 
     # no clear hemisphere - check if there is another hemisphere by 
-    # intersecting hulls of the two sets of points
+    # intersecting hulls of the two sets of points (see in reference)
     else:
-        # raise NotImplementedError('Points accros the Equator are currently not supported.')
+        #project points in each hemisphere separately
         north_lats = lats[kk_north]
         north_lons = lons[kk_north]
         south_lats = lats[kk_south]
         south_lons = lons[kk_south]
         north_xypts = gnomonic_proj(lat0, lon0, north_lats, north_lons)
         south_xypts = gnomonic_proj(lat0, lon0, south_lats, south_lons)
-        # north_cvhull = np.array(ConvexHull(north_xypts).points)
-        # south_cvhull = np.array(ConvexHull(south_xypts).points)
+        #compute planar convex hulls
         north_cvhull_idx = np.array(ConvexHull(north_xypts).vertices)
         south_cvhull_idx = np.array(ConvexHull(south_xypts).vertices)
         north_cvhull = north_xypts[north_cvhull_idx,:]
         south_cvhull = south_xypts[south_cvhull_idx,:]
 
-        #check if they intersect by passing over every edge and check whether it forms a separating axis
-        #currently the method used is O(n^2), based on https://stackoverflow.com/questions/753140/how-do-i-determine-if-two-convex-polygons-intersect
-        #TODO: consider logarithmic time algorithm using https://epubs.siam.org/doi/pdf/10.1137/1.9781611973730.109
+        #check if the convex hulls intersect by passing over every edge and check whether it forms a separating axis
+        #TODO: currently the method used is O(n^2), based on https://stackoverflow.com/questions/753140/how-do-i-determine-if-two-convex-polygons-intersect
+        #consider logarithmic time algorithm using https://epubs.siam.org/doi/pdf/10.1137/1.9781611973730.109
         #TODO: values are computed multiple times, optimize
         #TODO: code is duplicated, clean up
         jj = 0
         intersecting = True
-        while jj<len(north_cvhull):
+
+        while jj<len(north_cvhull): #first iterate over edges of "northern" convex hull
             jj1 = (jj+1) % len(north_cvhull)
+            # compute linear equation describing the edge
             m = (north_cvhull[jj1,1]-north_cvhull[jj,1])/(north_cvhull[jj1,0]-north_cvhull[jj,0])
             b = north_cvhull[jj,1] - m*north_cvhull[jj,0]
+            # check which side is every vertex of the hulls
             north_points_signs = np.sign(north_cvhull[:,1] - m*north_cvhull[:,0] - b)
-            # northPointsSigns = np.delete(northPointsSigns, northPointsSigns==0)
             south_points_signs = np.sign(south_cvhull[:,1] - m*south_cvhull[:,0] - b)
-            if (np.all(north_points_signs>=0) and np.all(south_points_signs<0)) or (np.all(north_points_signs<=0) and np.all(south_points_signs>0)):
-                intersecting = False
-                distances_from_line = np.abs(south_cvhull[:,1] - m*south_cvhull[:,0] - b) #/(m**2+1)
+
+            if (np.all(north_points_signs>=0) and np.all(south_points_signs<0)) or (np.all(north_points_signs<=0) and np.all(south_points_signs>0)): #if the edge separates the points...
+                intersecting = False #mark as non-intersecting
+                # move slightly the separating line so that it does not touch any of the hulls
+                distances_from_line = np.abs(south_cvhull[:,1] - m*south_cvhull[:,0] - b)
                 min_dist_idx = np.argmin(distances_from_line)
                 min_dist = distances_from_line[min_dist_idx]
                 b_delta = np.sign(south_cvhull[min_dist_idx,1] - m*south_cvhull[min_dist_idx,0] - b) * (min_dist) * 0.5
                 xs = np.array([np.min(south_cvhull[:,0]), np.max(north_cvhull[:,0])])
                 separating_cart = np.column_stack((xs, m*xs+b+b_delta,[1,1]))
-
-                # lats_separating = north_lats[north_cvhull_idx[[jj, jj1]]]
-                # lons_separating = north_lons[north_cvhull_idx[[jj, jj1]]]
                 break
             jj+=1
-        if intersecting: #keep checking the edges of the other polygon
+        if intersecting: #if there was no success looking for in the northern polygon edges, search in the southern polygon edges
             jj=0
             while jj<len(south_cvhull):
                 jj1 = (jj+1) % len(south_cvhull)
@@ -126,18 +123,17 @@ def sphere_convhull(lats, lons):
                     break
                 jj += 1
         
-        if intersecting:
+        if intersecting: #no separating edge was found
             raise ValueError('Points are not hemispheric, the convex hull is the whole sphere.')
         
-        #the points are on the same hemisphere, so find the appropriate point for central projection
+        #else the points are on the same hemisphere, so find the appropriate point for central projection
         else:
-            #find normal vector of plane of great circle (sign does not matter, it will work either way)
-            # separating_cart = np.column_stack(geog2cart(lats_separating, lons_separating))
+            #find normal vector of plane of great circle
             normal_vector = np.cross(separating_cart[1,:], separating_cart[0,:])
             normal_vector = normal_vector / np.linalg.norm(normal_vector)
             lat0, lon0 = cart2geog(normal_vector[0], normal_vector[1], normal_vector[2])
             
-            # gnomonic projection
+            # project
             pts = gnomonic_proj(lat0, lon0, lats, lons)
             # compute planar convex hull
             planar_convhull_idx = ConvexHull(pts).vertices
