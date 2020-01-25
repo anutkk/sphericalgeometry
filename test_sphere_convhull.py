@@ -30,7 +30,7 @@ for jj in range(0, number_of_points):
 
     lons = np.append(lons, lng)
     lats = np.append(lats, lat)
-
+chull_idx = sphericalgeometry.sphere_convhull(lats, lons)
 # Compute convex hull
 try:
     chull_idx = sphericalgeometry.sphere_convhull(lats, lons)
