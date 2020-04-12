@@ -8,7 +8,7 @@ The package's API is focused on simplicity, casuality and easiness of use.
 Inputs are arrays of geographic coordinates and outputs are scalars or arrays of geographic coordinates.
 Specifically, the package is **not** object-oriented.
 
-__This package is under active development. Expect API changes. __
+__This package is under active development. Expect API changes.__
 
 ## High-level functions
 
