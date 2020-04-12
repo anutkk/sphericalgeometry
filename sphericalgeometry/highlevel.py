@@ -145,10 +145,12 @@ def sphere_convhull(lats, lons):
 def polygon_area(lats, lons, algorithm = 0, radius = 6378137):
     """
     Computes area of spherical polygon, assuming spherical Earth. 
-    Returns result in square meters.
-    lats and lons are in radians.
+    Returns result in ratio of the sphere's area if the radius is specified. Otherwise, in the units of provided radius.
+    lats and lons are in degrees.
     """
     #TODO: take into account geodesy (i.e. convert latitude to authalic sphere, use radius of authalic sphere instead of mean radius of spherical earth)
+    lats = np.deg2rad(lats)
+    lons = np.deg2rad(lons)
 
     if algorithm==0:
         # Line integral based on Green's Theorem, assumes spherical Earth
