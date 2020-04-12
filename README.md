@@ -4,12 +4,11 @@ A Python package for spherical computational geometry.
 This package contains various spherical geometry functions that I needed and could not find in well-known libraries.
 The functions work on sets of points on the sphere.
 
-The package's API is focused for simplicity, casuality and easiness of use. 
+The package's API is focused on simplicity, casuality and easiness of use. 
 Inputs are arrays of geographic coordinates and outputs are scalars or arrays of geographic coordinates.
 Specifically, the package is **not** object-oriented.
 
-__This package is still under development. Many functions are to be added. 
-However, the API for high-level functions in the master branch will not be subject to changes.__
+__This package is under active development. Expect API changes. __
 
 ## High-level functions
 
