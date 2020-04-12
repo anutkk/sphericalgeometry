@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """ Spherical geometry functions.
 
-By Samuel Londner
+By anutkk - https://github.com/anutkk
 
 
 """
