@@ -11,15 +11,11 @@ Specifically, the package is **not** object-oriented.
 __This package is still under development. Many functions are to be added. 
 However, the API for high-level functions in the master branch will not be subject to changes.__
 
-## Requirements
-
-* Python >= 3.6
-* Numpy
-* Scipy
-
 ## High-level functions
 
 * `sphere_convhull`: Computes the spherical convex hull of a set of points on the unit sphere.
+* `polygon_area`: Computes the area of a polygon on the sphere.
+
 <!--
 
 * `minareapolygon`: Computes the minimum-area bounding polygon of a set of points on the sphere.
@@ -54,13 +50,20 @@ However, some of the low-level functions return and use 3D Cartesian coordinates
 
 
 -->
+
+## Requirements
+
+* Python >= 3.6
+* Numpy
+* Scipy
+
 ## Limitations
 
 There is no support for disjoint polygons.
 
 ## Alternatives
 
-Check out the [spherical_geometry](https://github.com/spacetelescope/spherical_geometry) package by spacetelescope. Stable and strongly object-oriented.
+Check out the [spherical_geometry](https://github.com/spacetelescope/spherical_geometry) package by spacetelescope. This is a stable and strongly object-oriented package, but I am unsure if it is still maintained.
 
 ## Some basic notions of spherical geometry
 ### Great circles and geodesics
