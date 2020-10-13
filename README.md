@@ -69,7 +69,7 @@ Check out the [spherical_geometry](https://github.com/spacetelescope/spherical_g
 
 In "regular" Euclidean geometry, the shortest path between two points on the plane is simply the straight segment between them. But when the points are on a sphere, the shortest path on the sphere is not a straight 3D segment - since this segment crosses the sphere but is not part of it. Instead, this would be a "line on the sphere". The shortest between two points over a surface is sometimes called a geodesic <sup>[1](#myfootnote1)</sup>.
 
-Given two "close" points on the sphere, they define a unique circle on the sphere which passes through them. We call this circle a "great circle". The great circle is separated in two paths, both of them connecting the two points. The shortest path on the sphere between the points is the smallest part of the corresponding great circle.
+Given two "close" points on the sphere, they define a unique circle on the sphere which passes through them. We call this circle a "great circle". The great circle is separated in two arcs, both of them connecting the two points. The shorter arc on the sphere between the points is the smallest part of the corresponding great circle. Sometimes, the longer of these great circle arcs is called the major arc, and the shorter is the minor arc.
 
 <!-- TODO: add figure -->
 
@@ -114,6 +114,8 @@ Minimum-perimeter bounding spherical polygon
 1. Frank Weller, Carsten Kirstein, ["Computing the Convex Hull of a Simple Polygon on the Sphere"](https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.43.987) (1996).
 1. Chamberlain, Robert G.; Duquette, William H., ["Some algorithms for polygons on a sphere"](https://trs.jpl.nasa.gov/handle/2014/40409), NASA Jet Propulsion Laboratory (2007).
 1. Ning Wang, ["An efficient search algorithm for minimum covering polygons on the sphere"](https://esrl.noaa.gov/gsd/nim/references/efficient_search_algorithm_for_minimum_covering_polygons_on_the_sphere.pdf), SIAM J. SCI. COMPUT (2013).
+1. Michael Bevis and Jean-Luc Chatelin, ["Locating a Point on a Spherical Surface Relative to a Spherical Polygon of Arbitrary Shape"](https://link.springer.com/article/10.1007/BF00894449), Springer (1989). 
+
 
 ## Notes
 
